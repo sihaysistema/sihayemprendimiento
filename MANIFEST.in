@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include sihayemprendimiento *.css
+recursive-include sihayemprendimiento *.csv
+recursive-include sihayemprendimiento *.html
+recursive-include sihayemprendimiento *.ico
+recursive-include sihayemprendimiento *.js
+recursive-include sihayemprendimiento *.json
+recursive-include sihayemprendimiento *.md
+recursive-include sihayemprendimiento *.png
+recursive-include sihayemprendimiento *.py
+recursive-include sihayemprendimiento *.svg
+recursive-include sihayemprendimiento *.txt
+recursive-exclude sihayemprendimiento *.pyc
