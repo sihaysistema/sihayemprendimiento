@@ -106,7 +106,7 @@ app_license = "MIT"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
+scheduler_events = {
 # 	"all": [
 # 		"sihayemprendimiento.tasks.all"
 # 	],
@@ -119,10 +119,10 @@ app_license = "MIT"
 # 	"weekly": [
 # 		"sihayemprendimiento.tasks.weekly"
 # 	]
-# 	"monthly": [
-# 		"sihayemprendimiento.tasks.monthly"
-# 	]
-# }
+	"monthly": [
+		"sihayemprendimiento.api.sender"
+	]
+}
 
 # Testing
 # -------

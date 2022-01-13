@@ -1,0 +1,65 @@
+{
+ "actions": [],
+ "creation": "2022-01-12 15:20:38.723189",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "public_key",
+  "private_key",
+  "master_domain",
+  "company"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Table",
+   "label": "Company",
+   "options": "SHE Company"
+  },
+  {
+   "fieldname": "public_key",
+   "fieldtype": "Password",
+   "label": "Public Key"
+  },
+  {
+   "fieldname": "private_key",
+   "fieldtype": "Password",
+   "label": "Private Key"
+  },
+  {
+   "fieldname": "master_domain",
+   "fieldtype": "Data",
+   "label": "Master Domain"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2022-01-12 15:33:12.504850",
+ "modified_by": "Administrator",
+ "module": "Si Hay Emprendimiento",
+ "name": "SHE Config",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Administrator",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
