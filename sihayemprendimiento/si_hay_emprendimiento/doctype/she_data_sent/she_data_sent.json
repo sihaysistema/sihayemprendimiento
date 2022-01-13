@@ -7,10 +7,17 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "company",
+  "customer",
+  "column_break_3",
+  "tax_id",
+  "section_break_3",
   "month",
   "year",
   "currency",
-  "total"
+  "column_break_7",
+  "total",
+  "total_due"
  ],
  "fields": [
   {
@@ -39,13 +46,51 @@
    "fieldname": "total",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Total",
+   "label": "Total Month",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Data",
+   "label": "Customer",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_3",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_due",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Due",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tax_id",
+   "fieldtype": "Data",
+   "label": "Tax ID",
    "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-01-12 16:34:12.973545",
+ "modified": "2022-01-13 16:38:54.204038",
  "modified_by": "Administrator",
  "module": "Si Hay Emprendimiento",
  "name": "SHE Data Sent",

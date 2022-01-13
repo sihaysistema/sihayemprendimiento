@@ -3,16 +3,22 @@
 
 from __future__ import unicode_literals
 
+import base64
 import json
+
 import frappe
 import requests
-
+from factura_electronica.factura_electronica.report.gt_sales_ledger.gt_sales_ledger import \
+    execute
 from frappe import _
-from frappe.utils import get_site_name, get_first_day, get_last_day, nowdate, flt
-from factura_electronica.factura_electronica.report.gt_sales_ledger.gt_sales_ledger import execute
+from frappe.utils import (flt, get_first_day, get_last_day, get_site_name,
+                          nowdate)
+from frappe.utils.password import get_decrypted_password
+
 from sihayemprendimiento.utils.she_math import calculate_amount
 
-MONTHS = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December",)
+MONTHS = ("January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December",)
 
 
 @frappe.whitelist()
@@ -20,7 +26,6 @@ def sender():
     """
     Envia el total de ventas por mes al server de sihaysistema
     """
-
     try:
         today = nowdate()
 
@@ -42,7 +47,8 @@ def sender():
                 "options": "Monthly"
             })
 
-            # Ejecuta el reporte de GT Sales Ledger
+            # Ejecuta el reporte de GT Sales Ledger para obtener el total de ventas
+            # del mes actual
             res = execute(filters)[1][0]
             res.update({
                 "company": company.company,
@@ -50,14 +56,34 @@ def sender():
                 "customer": company.customer,
             })
 
-            with open("resultado.json", "w") as f:
-                f.write(json.dumps(res, indent=2, default=str))
+            response = request_server(res)
 
-        frappe.msgprint(
-            msg=f'Datos Enviados al servidor de Si Hay Sistema',
-            title=_(f'Datos enviados'),
-            indicator='green'
-        )
+            if response[0]:
+                frappe.msgprint(
+                    msg=f'Datos enviados al servidor de Si Hay Sistema',
+                    title=_(f'Datos enviados'),
+                    indicator='green'
+                )
+            else:
+                frappe.msgprint(
+                    msg=f'Dato no recibido, por favor enviar manualmente',
+                    title=_(f'Datos No Recibidos'),
+                    indicator='red'
+                )
+
+            doc = frappe.get_doc({
+                'doctype': 'SHE Data Sent',
+                'month': MONTHS[res.get('month_repo')],
+                'year': res.get('year_repo'),
+                'currency': res.get('currency'),
+                'total': res.get('total'),
+                'total_due': calculate_amount(flt(res.get('total'), 2)),
+                'company': res.get('company'),
+                'customer': res.get('customer'),
+                'tax_id': res.get('tax_id'),
+                'status': response[1]
+            })
+            doc.insert()
 
     except:
         frappe.msgprint(
@@ -96,3 +122,32 @@ def receiver(**kwargs):
 
     except:
         return False, "No Recibido"
+
+
+def request_server(res):
+    try:
+        # Envio de datos
+        url = frappe.db.get_single_value('SHE Config', 'master_domain')
+        api_key = get_decrypted_password('SHE Config', 'SHE Config', 'public_key', False)
+        api_secret = get_decrypted_password('SHE Config', 'SHE Config', 'private_key', False)
+        secret = "{0}:{1}".format(api_key, api_secret)
+
+        with open('decrypted.txt', 'w') as f:
+            f.write(str(secret))
+
+        key_p = base64.b64encode(secret.encode('ascii'))
+
+        payload = res
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Basic {key_p.decode("utf-8")}'
+        }
+
+        response = requests.request("POST", url, headers=headers, data=payload)
+        if response[0]:
+            return True, "Enviado"
+        else:
+            return False, "No Enviado"
+
+    except:
+        return False, "No Enviado"
