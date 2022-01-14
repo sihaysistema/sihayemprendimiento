@@ -56,8 +56,10 @@ def sender():
                 "customer": company.customer,
             })
 
+            # Realiza peticion al servidor principal
             response = request_server(res)
 
+            # Registra el dato enviado
             doc = frappe.get_doc({
                 'doctype': 'SHE Data Sent',
                 'month': MONTHS[res.get('month_repo')],
@@ -72,25 +74,24 @@ def sender():
             })
             doc.insert()
 
-            if response[0]:
+            if not response[0]:
                 frappe.msgprint(
-                    msg=f'Datos enviados al servidor de Si Hay Sistema',
-                    title=_(f'Datos enviados'),
-                    indicator='green'
-                )
-            else:
-                frappe.msgprint(
-                    msg=f'Dato no recibido, por favor reportar este incidente <hr> <code>{response[1]}</code>',
+                    msg=f'Dato no recibido, por favor reportar este incidente para la compañia {res.get("company")} <hr> <code>{response[1]}</code>',
                     title=_(f'Datos No Recibidos'),
-                    indicator='red'
+                    raise_exception=True
                 )
-                
-            return
+
+        frappe.msgprint(
+            msg='Datos enviados al servidor de Si Hay Sistema',
+            title=_('Datos enviados'),
+            indicator='green'
+        )
+        return
 
     except:
         frappe.msgprint(
             msg=f'Detalle del error <br><hr> <code>{frappe.get_traceback()}</code>',
-            title=_(f'Datos no enviados'),
+            title=_('Datos no enviados'),
             raise_exception=True
         )
 
@@ -103,9 +104,6 @@ def receiver(**kwargs):
         tuple: status
     """
     try:
-        with open('datos-recibidos.json', 'w') as f:
-            f.write(json.dumps(kwargs))
-
         frappe.local.response.http_status_code = 200
 
         if not kwargs: False, "No Recibido"
@@ -120,6 +118,7 @@ def receiver(**kwargs):
             'company': kwargs.get('company'),
             'customer': kwargs.get('customer'),
             'tax_id': kwargs.get('tax_id'),
+            'status': 'Recibido',
         })
         doc.insert()
 
@@ -130,16 +129,21 @@ def receiver(**kwargs):
 
 
 def request_server(res):
+    """Generador de peticiones al server principal
+
+    Args:
+        res (dict): Datos a enviar
+
+    Returns:
+        tuple: Status
+    """
     try:
         # Envio de datos
         url = frappe.db.get_single_value('SHE Config', 'master_domain')
         api_key = get_decrypted_password('SHE Config', 'SHE Config', 'public_key', False)
         api_secret = get_decrypted_password('SHE Config', 'SHE Config', 'private_key', False)
+        
         secret = "{0}:{1}".format(api_key, api_secret)
-
-        with open('decrypted.txt', 'w') as f:
-            f.write(str(url))
-
         key_p = base64.b64encode(secret.encode('ascii'))
 
         payload = res
@@ -150,9 +154,10 @@ def request_server(res):
 
         response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
 
-        frappe.msgprint(json.loads(response.content))
+        # Debug:
+        # frappe.msgprint(str(json.loads(response.content.decode('utf-8'))))
 
-        if json.loads(response.content.get("message"))[0]:
+        if json.loads(response.content.decode('utf-8')).get("message")[0]:
             return True, "Enviado"
         else:
             return False, "No Enviado"

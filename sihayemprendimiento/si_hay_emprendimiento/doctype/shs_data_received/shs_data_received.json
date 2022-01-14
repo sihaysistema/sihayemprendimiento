@@ -17,7 +17,9 @@
   "column_break_7",
   "currency",
   "total",
-  "total_due"
+  "total_due",
+  "section_break_12",
+  "status"
  ],
  "fields": [
   {
@@ -88,11 +90,21 @@
    "fieldtype": "Data",
    "label": "Customer",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_break_12",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Text",
+   "label": "Status",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-01-13 13:48:15.313369",
+ "modified": "2022-01-13 19:04:44.051450",
  "modified_by": "Administrator",
  "module": "Si Hay Emprendimiento",
  "name": "SHS Data Received",

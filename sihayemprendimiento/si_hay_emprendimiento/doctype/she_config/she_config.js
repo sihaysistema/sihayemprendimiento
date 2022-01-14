@@ -15,10 +15,7 @@ function btn_sender(frm) {
         freeze: true, // Muestra efecto de pantalla congelada
         freeze_message: __("Sending data..."),
         callback: function (r) {
-          if (!r.exc) {
-            clearInterval(frm.page["interval"]);
-            frm.reload_doc();
-          }
+          // frm.reload_doc();
         },
       });
     })

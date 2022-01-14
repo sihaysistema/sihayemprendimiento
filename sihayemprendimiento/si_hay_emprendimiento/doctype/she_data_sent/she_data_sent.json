@@ -17,7 +17,9 @@
   "currency",
   "column_break_7",
   "total",
-  "total_due"
+  "total_due",
+  "section_break_12",
+  "status"
  ],
  "fields": [
   {
@@ -86,11 +88,21 @@
    "fieldtype": "Data",
    "label": "Tax ID",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_break_12",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Text",
+   "label": "Status",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-01-13 16:38:54.204038",
+ "modified": "2022-01-13 19:04:35.908737",
  "modified_by": "Administrator",
  "module": "Si Hay Emprendimiento",
  "name": "SHE Data Sent",
