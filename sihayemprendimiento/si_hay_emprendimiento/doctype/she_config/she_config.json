@@ -1,0 +1,106 @@
+{
+ "actions": [],
+ "creation": "2022-01-12 15:20:38.723189",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "public_key",
+  "private_key",
+  "master_domain",
+  "column_break_5",
+  "receiver",
+  "section_break_4",
+  "company",
+  "section_break_5",
+  "product_to_be_invoiced",
+  "sales_taxes_and_charges_default"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Table",
+   "label": "Company",
+   "options": "SHE Company"
+  },
+  {
+   "depends_on": "eval:!doc.receiver",
+   "fieldname": "public_key",
+   "fieldtype": "Password",
+   "label": "Public Key"
+  },
+  {
+   "depends_on": "eval:!doc.receiver",
+   "fieldname": "private_key",
+   "fieldtype": "Password",
+   "label": "Private Key"
+  },
+  {
+   "depends_on": "eval:!doc.receiver",
+   "fieldname": "master_domain",
+   "fieldtype": "Data",
+   "label": "Master Domain"
+  },
+  {
+   "depends_on": "eval:doc.receiver",
+   "fieldname": "section_break_5",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "product_to_be_invoiced",
+   "fieldtype": "Link",
+   "label": "Product To Be Invoiced",
+   "options": "Item"
+  },
+  {
+   "fieldname": "sales_taxes_and_charges_default",
+   "fieldtype": "Link",
+   "label": "Sales Taxes and Charges Default",
+   "options": "Sales Taxes and Charges Template"
+  },
+  {
+   "fieldname": "column_break_5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "receiver",
+   "fieldtype": "Check",
+   "label": "Receiver?"
+  },
+  {
+   "depends_on": "eval:!doc.receiver",
+   "fieldname": "section_break_4",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2022-01-14 13:54:05.806031",
+ "modified_by": "Administrator",
+ "module": "Si Hay Emprendimiento",
+ "name": "SHE Config",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Administrator",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
