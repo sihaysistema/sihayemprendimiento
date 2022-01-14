@@ -58,19 +58,6 @@ def sender():
 
             response = request_server(res)
 
-            if response[0]:
-                frappe.msgprint(
-                    msg=f'Datos enviados al servidor de Si Hay Sistema',
-                    title=_(f'Datos enviados'),
-                    indicator='green'
-                )
-            else:
-                frappe.msgprint(
-                    msg=f'Dato no recibido, por favor enviar manualmente',
-                    title=_(f'Datos No Recibidos'),
-                    indicator='red'
-                )
-
             doc = frappe.get_doc({
                 'doctype': 'SHE Data Sent',
                 'month': MONTHS[res.get('month_repo')],
@@ -84,6 +71,21 @@ def sender():
                 'status': response[1]
             })
             doc.insert()
+
+            if response[0]:
+                frappe.msgprint(
+                    msg=f'Datos enviados al servidor de Si Hay Sistema',
+                    title=_(f'Datos enviados'),
+                    indicator='green'
+                )
+            else:
+                frappe.msgprint(
+                    msg=f'Dato no recibido, por favor reportar este incidente <hr> <code>{response[1]}</code>',
+                    title=_(f'Datos No Recibidos'),
+                    indicator='red'
+                )
+                
+            return
 
     except:
         frappe.msgprint(
@@ -101,6 +103,9 @@ def receiver(**kwargs):
         tuple: status
     """
     try:
+        with open('datos-recibidos.json', 'w') as f:
+            f.write(json.dumps(kwargs))
+
         frappe.local.response.http_status_code = 200
 
         if not kwargs: False, "No Recibido"
@@ -133,7 +138,7 @@ def request_server(res):
         secret = "{0}:{1}".format(api_key, api_secret)
 
         with open('decrypted.txt', 'w') as f:
-            f.write(str(secret))
+            f.write(str(url))
 
         key_p = base64.b64encode(secret.encode('ascii'))
 
@@ -143,11 +148,14 @@ def request_server(res):
             'Authorization': f'Basic {key_p.decode("utf-8")}'
         }
 
-        response = requests.request("POST", url, headers=headers, data=payload)
-        if response[0]:
+        response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
+
+        frappe.msgprint(json.loads(response.content))
+
+        if json.loads(response.content.get("message"))[0]:
             return True, "Enviado"
         else:
             return False, "No Enviado"
 
     except:
-        return False, "No Enviado"
+        return False, frappe.get_traceback()
