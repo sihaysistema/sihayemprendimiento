@@ -25,7 +25,7 @@ function generate_invoice(frm) {
             taxes_and_charges: values.sales_taxes_and_charges_default,
             items: [],
             taxes: [],
-            // due_date: cur_frm.doc.posting_date_time,
+            due_date: cur_frm.doc.posting_date_time,
           };
 
           // Productos a facturar

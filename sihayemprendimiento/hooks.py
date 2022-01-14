@@ -107,6 +107,11 @@ app_license = "MIT"
 # ---------------
 
 scheduler_events = {
+    "cron": {
+        "0/1 * * * *": [
+            "sihayemprendimiento.api.sender"
+        ]
+    },
 # 	"all": [
 # 		"sihayemprendimiento.tasks.all"
 # 	],
@@ -119,9 +124,9 @@ scheduler_events = {
 # 	"weekly": [
 # 		"sihayemprendimiento.tasks.weekly"
 # 	]
-	"monthly": [
-		"sihayemprendimiento.api.sender"
-	]
+    "monthly": [
+        "sihayemprendimiento.api.sender"
+    ],
 }
 
 # Testing
@@ -152,24 +157,24 @@ scheduler_events = {
 # --------------------
 
 user_data_fields = [
-	{
-		"doctype": "{doctype_1}",
-		"filter_by": "{filter_by}",
-		"redact_fields": ["{field_1}", "{field_2}"],
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_2}",
-		"filter_by": "{filter_by}",
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_3}",
-		"strict": False,
-	},
-	{
-		"doctype": "{doctype_4}"
-	}
+    {
+        "doctype": "{doctype_1}",
+        "filter_by": "{filter_by}",
+        "redact_fields": ["{field_1}", "{field_2}"],
+        "partial": 1,
+    },
+    {
+        "doctype": "{doctype_2}",
+        "filter_by": "{filter_by}",
+        "partial": 1,
+    },
+    {
+        "doctype": "{doctype_3}",
+        "strict": False,
+    },
+    {
+        "doctype": "{doctype_4}"
+    }
 ]
 
 # Authentication and authorization

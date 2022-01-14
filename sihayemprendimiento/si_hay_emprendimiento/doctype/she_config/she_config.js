@@ -27,8 +27,8 @@ function btn_sender(frm) {
 
 function show_and_hide(frm) {
   if (!frm.doc.receiver) {
-    frm.clear_custom_buttons();
-  } else {
     btn_sender(frm);
+  } else {
+    frm.clear_custom_buttons();
   }
 }

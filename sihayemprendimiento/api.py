@@ -27,66 +27,71 @@ def sender():
     Envia el total de ventas por mes al server de sihaysistema
     """
     try:
-        today = nowdate()
+        switch_sender = frappe.db.get_single_value('SHE Config', 'receiver')
 
-        # Primer y ultimo dia del mes actual
-        from_date = str(get_first_day(today))
-        to_date = str(get_last_day(today))
-        companies = frappe.db.get_values('SHE Company', filters={'parent': 'SHE Config'},
-                                        fieldname=['company', 'currency', 'tax_id',
-                                                   'customer'], as_dict=1)
+        if not switch_sender:
+            today = nowdate()
 
-        # Por cada compañia configurada se realiza la consulta y envio de datos
-        for company in companies:
-            filters = frappe._dict({
-                "company": company.company,
-                "nit": company.tax_id,
-                "from_date": from_date,
-                "to_date": to_date,
-                "company_currency": company.currency,
-                "options": "Monthly"
-            })
+            # Primer y ultimo dia del mes actual
+            from_date = str(get_first_day(today))
+            to_date = str(get_last_day(today))
+            companies = frappe.db.get_values('SHE Company', filters={'parent': 'SHE Config'},
+                                            fieldname=['company', 'currency', 'tax_id',
+                                                    'customer'], as_dict=1)
 
-            # Ejecuta el reporte de GT Sales Ledger para obtener el total de ventas
-            # del mes actual
-            res = execute(filters)[1][0]
-            res.update({
-                "company": company.company,
-                "tax_id": company.tax_id,
-                "customer": company.customer,
-            })
+            # Por cada compañia configurada se realiza la consulta y envio de datos
+            for company in companies:
+                filters = frappe._dict({
+                    "company": company.company,
+                    "nit": company.tax_id,
+                    "from_date": from_date,
+                    "to_date": to_date,
+                    "company_currency": company.currency,
+                    "options": "Monthly"
+                })
 
-            # Realiza peticion al servidor principal
-            response = request_server(res)
+                # Ejecuta el reporte de GT Sales Ledger para obtener el total de ventas
+                # del mes actual
+                res = execute(filters)[1][0]
+                res.update({
+                    "company": company.company,
+                    "tax_id": company.tax_id,
+                    "customer": company.customer,
+                })
 
-            # Registra el dato enviado
-            doc = frappe.get_doc({
-                'doctype': 'SHE Data Sent',
-                'month': MONTHS[res.get('month_repo')],
-                'year': res.get('year_repo'),
-                'currency': res.get('currency'),
-                'total': res.get('total'),
-                'total_due': calculate_amount(flt(res.get('total'), 2)),
-                'company': res.get('company'),
-                'customer': res.get('customer'),
-                'tax_id': res.get('tax_id'),
-                'status': response[1],
-                'posting_date_time': str(now_datetime()),
-            })
-            doc.insert()
+                # Realiza peticion al servidor principal
+                response = request_server(res)
 
-            if not response[0]:
-                frappe.msgprint(
-                    msg=f'Dato no recibido, por favor reportar este incidente para la compañia {res.get("company")} <hr> <code>{response[1]}</code>',
-                    title=_(f'Datos No Recibidos'),
-                    raise_exception=True
-                )
+                # Registra el dato enviado
+                doc = frappe.get_doc({
+                    'doctype': 'SHE Data Sent',
+                    'month': MONTHS[res.get('month_repo')],
+                    'year': res.get('year_repo'),
+                    'currency': res.get('currency'),
+                    'total': res.get('total'),
+                    'total_due': calculate_amount(flt(res.get('total'), 2)),
+                    'company': res.get('company'),
+                    'customer': res.get('customer'),
+                    'tax_id': res.get('tax_id'),
+                    'status': response[1],
+                    'posting_date_time': str(now_datetime()),
+                })
+                doc.insert()
 
-        frappe.msgprint(
-            msg='Datos enviados al servidor de Si Hay Sistema',
-            title=_('Datos enviados'),
-            indicator='green'
-        )
+                if not response[0]:
+                    frappe.msgprint(
+                        msg=f'Dato no recibido, por favor reportar este incidente para la compañia {res.get("company")} <hr> <code>{response[1]}</code>',
+                        title=_(f'Datos No Recibidos'),
+                        raise_exception=True
+                    )
+
+            frappe.msgprint(
+                msg='Datos enviados al servidor de Si Hay Sistema',
+                title=_('Datos enviados'),
+                indicator='green'
+            )
+            return
+
         return
 
     except:
