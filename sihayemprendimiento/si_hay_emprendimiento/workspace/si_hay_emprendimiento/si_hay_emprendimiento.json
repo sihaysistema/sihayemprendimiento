@@ -25,7 +25,7 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "SHE Configuration",
+   "label": "Configuration",
    "link_to": "SHE Config",
    "link_type": "DocType",
    "onboard": 0,
@@ -42,7 +42,7 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "SHE Data Sent",
+   "label": "Data Sent",
    "link_to": "SHE Data Sent",
    "link_type": "DocType",
    "onboard": 0,
@@ -51,14 +51,14 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "SHS Data Received",
+   "label": "Data Received",
    "link_to": "SHS Data Received",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
   }
  ],
- "modified": "2022-01-12 16:36:39.049343",
+ "modified": "2022-01-14 15:03:38.090244",
  "modified_by": "Administrator",
  "module": "Si Hay Emprendimiento",
  "name": "Si Hay Emprendimiento",

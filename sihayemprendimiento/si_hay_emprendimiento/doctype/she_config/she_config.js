@@ -3,7 +3,10 @@
 
 frappe.ui.form.on("SHE Config", {
   refresh: function (frm) {
-    btn_sender(frm);
+    show_and_hide(frm);
+  },
+  receiver: function (frm) {
+    show_and_hide(frm);
   },
 });
 
@@ -20,4 +23,12 @@ function btn_sender(frm) {
       });
     })
     .addClass("btn-primary");
+}
+
+function show_and_hide(frm) {
+  if (!frm.doc.receiver) {
+    frm.clear_custom_buttons();
+  } else {
+    btn_sender(frm);
+  }
 }

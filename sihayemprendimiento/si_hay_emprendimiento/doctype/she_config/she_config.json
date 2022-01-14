@@ -8,7 +8,13 @@
   "public_key",
   "private_key",
   "master_domain",
-  "company"
+  "column_break_5",
+  "receiver",
+  "section_break_4",
+  "company",
+  "section_break_5",
+  "product_to_be_invoiced",
+  "sales_taxes_and_charges_default"
  ],
  "fields": [
   {
@@ -18,25 +24,60 @@
    "options": "SHE Company"
   },
   {
+   "depends_on": "eval:!doc.receiver",
    "fieldname": "public_key",
    "fieldtype": "Password",
    "label": "Public Key"
   },
   {
+   "depends_on": "eval:!doc.receiver",
    "fieldname": "private_key",
    "fieldtype": "Password",
    "label": "Private Key"
   },
   {
+   "depends_on": "eval:!doc.receiver",
    "fieldname": "master_domain",
    "fieldtype": "Data",
    "label": "Master Domain"
+  },
+  {
+   "depends_on": "eval:doc.receiver",
+   "fieldname": "section_break_5",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "product_to_be_invoiced",
+   "fieldtype": "Link",
+   "label": "Product To Be Invoiced",
+   "options": "Item"
+  },
+  {
+   "fieldname": "sales_taxes_and_charges_default",
+   "fieldtype": "Link",
+   "label": "Sales Taxes and Charges Default",
+   "options": "Sales Taxes and Charges Template"
+  },
+  {
+   "fieldname": "column_break_5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "receiver",
+   "fieldtype": "Check",
+   "label": "Receiver?"
+  },
+  {
+   "depends_on": "eval:!doc.receiver",
+   "fieldname": "section_break_4",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-01-12 15:33:12.504850",
+ "modified": "2022-01-14 13:54:05.806031",
  "modified_by": "Administrator",
  "module": "Si Hay Emprendimiento",
  "name": "SHE Config",
