@@ -76,20 +76,21 @@ def sender():
                     'status': response[1],
                     'posting_date_time': str(now_datetime()),
                 })
-                doc.insert()
+                doc.insert(ignore_permissions=True)
 
                 if not response[0]:
-                    frappe.msgprint(
-                        msg=f'Dato no recibido, por favor reportar este incidente para la compañia {res.get("company")} <hr> <code>{response[1]}</code>',
-                        title=_(f'Datos No Recibidos'),
-                        raise_exception=True
-                    )
+                    return
+                    # frappe.msgprint(
+                    #     msg=f'Dato no recibido, por favor reportar este incidente para la compañia {res.get("company")} <hr> <code>{response[1]}</code>',
+                    #     title=_(f'Datos No Recibidos'),
+                    #     raise_exception=True
+                    # )
 
-            frappe.msgprint(
-                msg='Datos enviados al servidor de Si Hay Sistema',
-                title=_('Datos enviados'),
-                indicator='green'
-            )
+            # frappe.msgprint(
+            #     msg='Datos enviados al servidor de Si Hay Sistema',
+            #     title=_('Datos enviados'),
+            #     indicator='green'
+            # )
             return
 
         return
@@ -197,3 +198,14 @@ def get_taxes(template_name):
         'included_in_print_rate': taxes.included_in_print_rate,
         'cost_center': taxes.cost_center,
     }
+
+
+def sync_now():
+    """Sincronizador de gt sales ledger
+    """
+    from frappe.utils.background_jobs import enqueue
+
+    # with open("registro.txt", "a") as f:
+    #     f.write(f"Iniciando sincronizacion {str(now_datetime())} \n")
+
+    enqueue('sihayemprendimiento.api.sender', timeout=20000, queue="long")

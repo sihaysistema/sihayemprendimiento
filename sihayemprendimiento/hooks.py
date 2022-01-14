@@ -107,11 +107,11 @@ app_license = "MIT"
 # ---------------
 
 scheduler_events = {
-    "cron": {
-        "0/1 * * * *": [
-            "sihayemprendimiento.api.sender"
-        ]
-    },
+    # "cron": {
+    #     "*/2 * * * *": [
+    #         "sihayemprendimiento.api.sync_now",
+    #     ],
+    # },
 # 	"all": [
 # 		"sihayemprendimiento.tasks.all"
 # 	],
@@ -125,7 +125,7 @@ scheduler_events = {
 # 		"sihayemprendimiento.tasks.weekly"
 # 	]
     "monthly": [
-        "sihayemprendimiento.api.sender"
+        "sihayemprendimiento.api.sync_now",
     ],
 }
 
