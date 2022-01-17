@@ -1,5 +1,7 @@
 from . import __version__ as app_version
 
+from sihayemprendimiento.fixtures import fill_fixtures
+
 app_name = "sihayemprendimiento"
 app_title = "Si Hay Emprendimiento"
 app_publisher = "Si Hay Sistema"
@@ -8,6 +10,8 @@ app_icon = "octicon octicon-file-directory"
 app_color = "grey"
 app_email = "m.m@sihaysistema.com"
 app_license = "MIT"
+
+fixtures = fill_fixtures()
 
 # Includes in <head>
 # ------------------
@@ -112,18 +116,18 @@ scheduler_events = {
     #         "sihayemprendimiento.api.sync_now",
     #     ],
     # },
-# 	"all": [
-# 		"sihayemprendimiento.tasks.all"
-# 	],
-# 	"daily": [
-# 		"sihayemprendimiento.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"sihayemprendimiento.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"sihayemprendimiento.tasks.weekly"
-# 	]
+    #   "all": [
+    #       "sihayemprendimiento.tasks.all"
+    #   ],
+    #   "daily": [
+    #       "sihayemprendimiento.tasks.daily"
+    #   ],
+    #   "hourly": [
+    #       "sihayemprendimiento.tasks.hourly"
+    #   ],
+    #   "weekly": [
+    #       "sihayemprendimiento.tasks.weekly"
+    #   ]
     "monthly": [
         "sihayemprendimiento.api.sync_now",
     ],
